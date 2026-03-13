@@ -1,9 +1,16 @@
-// Add declarations for selectionSort and insertionSort
+#ifndef TOKEN_FREQ_H
+#define TOKEN_FREQ_H
 
 #include <vector>
-#include "tokenFreq.h"
+#include <string>
 
-namespace NS_TOKEN_FREQ {
-    void selectionSort(std::vector<TokenFreq>& vec);
-    void insertionSort(std::vector<TokenFreq>& vec);
-}
+struct TokenFreq {
+    std::string token;
+    int freq;
+};
+
+void getTokenFreqVec(std::string&, std::vector<TokenFreq>&);
+void selectionSort(std::vector<TokenFreq>&);
+void insertionSort(std::vector<TokenFreq>&);
+
+#endif // TOKEN_FREQ_H
