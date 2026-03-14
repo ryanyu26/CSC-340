@@ -107,12 +107,11 @@ inline bool test2_operatorPlus() {
 }
 
 inline bool test3_operatorPlus() {
-    // Different token names are not combined by this implementation.
-    // Expect left value to be returned unchanged.
+    // Different token names still sum frequencies; left token label is retained.
     TokenFreq a{"left", 10};
     TokenFreq b{"right", 20};
     TokenFreq c = a + b;
-    return c.token == "left" && c.freq == 10;
+    return c.token == "left" && c.freq == 30;
 }
 
 inline bool test1_getTokenFreqVec() {
@@ -181,6 +180,42 @@ inline bool test3_sortByFreqDescThenTokenAsc() {
     // Empty vector should stay empty after sorting.
     vector<TokenFreq> vec = {};
     NS_TOKEN_FREQ::sortByFreqDescThenTokenAsc(vec);
+    return vec.empty();
+}
+
+inline bool test1_selectionSort() {
+    vector<TokenFreq> vec = {{"a", 1}, {"b", 3}, {"c", 2}};
+    NS_TOKEN_FREQ::selectionSort(vec);
+    return vec[0].token == "b" && vec[1].token == "c" && vec[2].token == "a";
+}
+
+inline bool test2_selectionSort() {
+    vector<TokenFreq> vec = {{"z", 5}, {"a", 5}, {"m", 5}};
+    NS_TOKEN_FREQ::selectionSort(vec);
+    return vec[0].token == "a" && vec[1].token == "m" && vec[2].token == "z";
+}
+
+inline bool test3_selectionSort() {
+    vector<TokenFreq> vec = {};
+    NS_TOKEN_FREQ::selectionSort(vec);
+    return vec.empty();
+}
+
+inline bool test1_insertionSort() {
+    vector<TokenFreq> vec = {{"a", 1}, {"b", 3}, {"c", 2}};
+    NS_TOKEN_FREQ::insertionSort(vec);
+    return vec[0].token == "b" && vec[1].token == "c" && vec[2].token == "a";
+}
+
+inline bool test2_insertionSort() {
+    vector<TokenFreq> vec = {{"z", 5}, {"a", 5}, {"m", 5}};
+    NS_TOKEN_FREQ::insertionSort(vec);
+    return vec[0].token == "a" && vec[1].token == "m" && vec[2].token == "z";
+}
+
+inline bool test3_insertionSort() {
+    vector<TokenFreq> vec = {};
+    NS_TOKEN_FREQ::insertionSort(vec);
     return vec.empty();
 }
 

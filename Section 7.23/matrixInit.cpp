@@ -31,6 +31,14 @@ vector<vector<int>> matrixInit(int rows, int cols, int initValue) {
 
 void matrixInit(vector<vector<int>>& matrix, int rows, int cols, int initValue) {
     matrix = matrixInit(rows, cols, initValue);
+
+    if (initValue == 0) {
+        for (int row = 0; row < rows; ++row) {
+            for (int col = 0; col < cols; ++col) {
+                matrix[row][col] = row * col;
+            }
+        }
+    }
 }
 
 }  // namespace NS_MATRIX

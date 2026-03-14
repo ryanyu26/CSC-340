@@ -21,10 +21,7 @@ bool operator<=(const TokenFreq& lhs, const TokenFreq& rhs) {
 
 TokenFreq operator+(const TokenFreq& lhs, const TokenFreq& rhs) {
     // Time complexity: O(1)
-    // Combine frequencies only when both objects represent the same token.
-    if (lhs.token != rhs.token) {
-        return {lhs.token, lhs.freq};
-    }
+    // Combine frequencies and keep the left token label.
 
     // Fail-safe: protect against integer overflow.
     if (rhs.freq > 0 && lhs.freq > numeric_limits<int>::max() - rhs.freq) {
@@ -71,10 +68,22 @@ vector<TokenFreq> getTokenFreqVec(const vector<string>& tokens) {
 void getTokenFreqVec(const string& istr, vector<TokenFreq>& tfVec) {
     istringstream iss(istr);
     vector<string> tokens;
-    string token;
+    string rawToken;
 
-    while (iss >> token) {
-        tokens.push_back(token);
+    while (iss >> rawToken) {
+        size_t left = 0;
+        size_t right = rawToken.size();
+
+        while (left < right && !isalnum(static_cast<unsigned char>(rawToken[left]))) {
+            ++left;
+        }
+        while (right > left && !isalnum(static_cast<unsigned char>(rawToken[right - 1]))) {
+            --right;
+        }
+
+        if (left < right) {
+            tokens.push_back(rawToken.substr(left, right - left));
+        }
     }
 
     tfVec = getTokenFreqVec(tokens);
