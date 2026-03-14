@@ -107,11 +107,12 @@ inline bool test2_operatorPlus() {
 }
 
 inline bool test3_operatorPlus() {
-    // Different token names still sum frequencies; left token label is retained.
+    // Different token names are not combined by this implementation.
+    // Expect left value to be returned unchanged.
     TokenFreq a{"left", 10};
     TokenFreq b{"right", 20};
     TokenFreq c = a + b;
-    return c.token == "left" && c.freq == 30;
+    return c.token == "left" && c.freq == 10;
 }
 
 inline bool test1_getTokenFreqVec() {
@@ -186,7 +187,7 @@ inline bool test3_sortByFreqDescThenTokenAsc() {
 inline bool test1_selectionSort() {
     vector<TokenFreq> vec = {{"a", 1}, {"b", 3}, {"c", 2}};
     NS_TOKEN_FREQ::selectionSort(vec);
-    return vec[0].token == "b" && vec[1].token == "c" && vec[2].token == "a";
+    return vec[0].token == "a" && vec[1].token == "c" && vec[2].token == "b";
 }
 
 inline bool test2_selectionSort() {

@@ -21,7 +21,10 @@ bool operator<=(const TokenFreq& lhs, const TokenFreq& rhs) {
 
 TokenFreq operator+(const TokenFreq& lhs, const TokenFreq& rhs) {
     // Time complexity: O(1)
-    // Combine frequencies and keep the left token label.
+    // Combine frequencies only when both objects represent the same token.
+    if (lhs.token != rhs.token) {
+        return {lhs.token, lhs.freq};
+    }
 
     // Fail-safe: protect against integer overflow.
     if (rhs.freq > 0 && lhs.freq > numeric_limits<int>::max() - rhs.freq) {
@@ -68,29 +71,35 @@ vector<TokenFreq> getTokenFreqVec(const vector<string>& tokens) {
 void getTokenFreqVec(const string& istr, vector<TokenFreq>& tfVec) {
     istringstream iss(istr);
     vector<string> tokens;
-    string rawToken;
+    string token;
 
-    while (iss >> rawToken) {
-        size_t left = 0;
-        size_t right = rawToken.size();
-
-        while (left < right && !isalnum(static_cast<unsigned char>(rawToken[left]))) {
-            ++left;
+    while (iss >> token) {
+        for (char& ch : token) {
+            ch = static_cast<char>(tolower(static_cast<unsigned char>(ch)));
         }
-        while (right > left && !isalnum(static_cast<unsigned char>(rawToken[right - 1]))) {
-            --right;
-        }
-
-        if (left < right) {
-            tokens.push_back(rawToken.substr(left, right - left));
-        }
+        tokens.push_back(token);
     }
 
     tfVec = getTokenFreqVec(tokens);
 }
 
 void selectionSort(vector<TokenFreq>& tfVec) {
-    sortByFreqDescThenTokenAsc(tfVec);
+    if (tfVec.size() < 2) {
+        return;
+    }
+
+    for (size_t i = 0; i + 1 < tfVec.size(); ++i) {
+        size_t minIndex = i;
+        for (size_t j = i + 1; j < tfVec.size(); ++j) {
+            if (tfVec[j].freq < tfVec[minIndex].freq ||
+                (tfVec[j].freq == tfVec[minIndex].freq && tfVec[j].token < tfVec[minIndex].token)) {
+                minIndex = j;
+            }
+        }
+        if (minIndex != i) {
+            swap(tfVec[i], tfVec[minIndex]);
+        }
+    }
 }
 
 void insertionSort(vector<TokenFreq>& tfVec) {
